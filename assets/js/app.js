@@ -15,8 +15,14 @@ let delNumArr = [];
 let point;
 
 const cardSound = new Audio(
-  "https://github.com/sinansarikaya/js-guessing-game/tree/main/assets/sounds/card.mp3"
+  "https://sinansarikaya.github.io/js-guessing-game/assets/sounds/card.mp3"
 );
+// cardSound.addEventListener("canplaythrough", () => {
+//   cardSound.play(); // Play when ready
+// });
+// const playCardSound = () => {
+//   cardSound.repl;
+// };
 
 const getRandomNumber = (min, max) => {
   let rand = Math.floor(Math.random() * (max - min + 1) + min);
@@ -106,8 +112,8 @@ cards.addEventListener("click", (e) => {
   if (!e.target.classList.contains("card")) {
     return;
   }
+  cardSound.currentTime = 0;
   cardSound.play();
-
   let userNum = parseInt(selectNumber);
 
   if (userNum == randomNumber) {
