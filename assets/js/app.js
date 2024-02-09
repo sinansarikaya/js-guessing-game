@@ -17,12 +17,9 @@ let point;
 const cardSound = new Audio(
   "https://sinansarikaya.github.io/js-guessing-game/assets/sounds/card.mp3"
 );
-// cardSound.addEventListener("canplaythrough", () => {
-//   cardSound.play(); // Play when ready
-// });
-// const playCardSound = () => {
-//   cardSound.repl;
-// };
+const startGame = new Audio(
+  "https://sinansarikaya.github.io/js-guessing-game/assets/sounds/startGame.mp3"
+);
 
 const getRandomNumber = (min, max) => {
   let rand = Math.floor(Math.random() * (max - min + 1) + min);
@@ -50,6 +47,8 @@ difficultyButtons.addEventListener("click", (event) => {
   } else {
     return;
   }
+  startGame.currentTime = 0;
+  startGame.play();
   point *= maxNum;
   userClass.innerText = "Sinan ";
 
