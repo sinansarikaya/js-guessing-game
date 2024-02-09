@@ -14,7 +14,9 @@ let maxNum;
 let delNumArr = [];
 let point;
 
-const cardSound = new Audio("../sounds/card.wav");
+const cardSound = new Audio(
+  "https://github.com/sinansarikaya/js-guessing-game/tree/main/assets/sounds/card.mp3"
+);
 
 const getRandomNumber = (min, max) => {
   let rand = Math.floor(Math.random() * (max - min + 1) + min);
