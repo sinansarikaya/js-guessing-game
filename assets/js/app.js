@@ -77,6 +77,16 @@ const updateLeaderboard = () => {
 
   const topScores = JSON.parse(localStorage.getItem("topScores")) || [];
 
+  console.log(topScores.length == 0);
+
+  if (topScores.length == 0) {
+    const noValue = document.createElement("div");
+    noValue.className = "no-value";
+    noValue.innerText = "No scores yet! Start playing to add your score.";
+
+    leaderboardContainer.appendChild(noValue);
+  }
+
   topScores.forEach((user, index) => {
     const userElement = document.createElement("div");
     userElement.className = "user";
@@ -192,8 +202,7 @@ const generateNumberArray = (min, max) => {
   if (hasUserGuessed) {
     const winCard = document.createElement("div");
     winCard.className = "win-card";
-    // winCard.innerText = `You won! Your point is ${point}`;
-    winCard.innerText = "You won!";
+    winCard.innerText = `You won! Your point is ${point}`;
     cards.appendChild(winCard);
     playSounds(sounds.levelWin);
 

@@ -282,3 +282,21 @@ body {
 .container .leaderboard .user .userPoint {
   margin-left: auto;
 }
+.footer {
+  background-color: var(--secondary-hover);
+  height: 60px;
+  color: var(--primary-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+.footer a {
+  color: var(--primary-color);
+}
+.footer a:hover {
+  color: var(--orange-hover);
+}
+.footer .footer_heart__SGb3w {
+  color: var(--red-color);
+}
