@@ -19,7 +19,7 @@
       <div class="username"></div>
       <ul class="menu">
         <li class="menu-item home">Home</li>
-        <li class="menu-item">Leaderboard</li>
+        <li class="menu-item lead-link">Leaderboard</li>
       </ul>
     </nav>
     <div class="container">
@@ -28,6 +28,8 @@
         <p class="welcome-message">
           Welcome to the guessing game! Try to guess the correct number.
         </p>
+        <span class="alert">Invalid name!</span>
+
         <input type="text" class="name" placeholder="Enter your name" />
         <div class="difficulty-buttons">
           <button class="btn easy">Easy</button>
@@ -54,6 +56,8 @@
 
         <div class="cards"></div>
       </div>
+
+      <div class="leaderboard none"></div>
     </div>
     <script src="./assets/js/app.js"></script>
   </body>

@@ -8,6 +8,12 @@ const downBtn = document.querySelector(".downBtn");
 const userClass = document.querySelector(".username");
 const checkbox = document.getElementById("cb");
 const user = document.querySelector(".name");
+const alert = document.querySelector(".alert");
+const leaderboard = document.querySelector(".leaderboard");
+const leadLink = document.querySelector(".lead-link");
+const leaderboardContainer = document.querySelector(".leaderboard");
+
+let cardsArray = Array.from(cards.children);
 
 let selectNumber;
 let hasUserGuessed = false;
@@ -15,7 +21,6 @@ let minNum = 1;
 let maxNum;
 let delNumArr = [];
 let point;
-let userName = user.value;
 
 const sounds = {
   startGame: new Audio(
@@ -33,7 +38,6 @@ window.onload = () => {
   const savedCheckboxState = localStorage.getItem("soundStatus");
   if (savedCheckboxState === null) {
     localStorage.setItem("soundStatus", "true");
-    console.log("NULL");
   }
 
   if (savedCheckboxState === "true") {
@@ -63,9 +67,81 @@ const playSounds = (sound) => {
   }
 };
 
+const updateLeaderboard = () => {
+  leaderboardContainer.innerHTML = "";
+  const leadTitle = document.createElement("div");
+  leadTitle.className = "leaderboard-title";
+  leadTitle.innerText = "Leaderboard";
+
+  leaderboardContainer.appendChild(leadTitle);
+
+  const topScores = JSON.parse(localStorage.getItem("topScores")) || [];
+
+  topScores.forEach((user, index) => {
+    const userElement = document.createElement("div");
+    userElement.className = "user";
+
+    const rankSpan = document.createElement("span");
+    rankSpan.className = "rank";
+    rankSpan.innerText = index + 1;
+    userElement.appendChild(rankSpan);
+
+    const usernameSpan = document.createElement("span");
+    usernameSpan.className = "user-name";
+    usernameSpan.innerText = user.username;
+    userElement.appendChild(usernameSpan);
+
+    const userPointSpan = document.createElement("span");
+    userPointSpan.className = "userPoint";
+    userPointSpan.innerText = Math.max(...user.scores);
+    userElement.appendChild(userPointSpan);
+
+    leaderboardContainer.appendChild(userElement);
+  });
+};
+
+const updateTopScores = (username, score) => {
+  const topScores = JSON.parse(localStorage.getItem("topScores")) || [];
+
+  const existingUser = topScores.find((user) => user.username === username);
+
+  if (existingUser) {
+    const newUser = { username, scores: [score] };
+    topScores.push(newUser);
+  } else {
+    const existingUserIndex = topScores.findIndex(
+      (user) => user.username === username
+    );
+
+    if (existingUserIndex !== -1) {
+      topScores[existingUserIndex].scores.push(score);
+    } else {
+      topScores.push({ username, scores: [score] });
+    }
+  }
+
+  topScores.sort((a, b) => {
+    const aMaxScore = Math.max(...a.scores);
+    const bMaxScore = Math.max(...b.scores);
+    return bMaxScore - aMaxScore;
+  });
+
+  if (topScores.length > 5) {
+    topScores.pop();
+  }
+
+  localStorage.setItem("topScores", JSON.stringify(topScores));
+};
+
 difficultyButtons.addEventListener("click", (event) => {
   const selectedButton = event.target;
   point = 10;
+
+  if (user.value.trim() === "" || user.value.length > 20) {
+    alert.classList.add("error");
+    user.classList.add("error");
+    return;
+  }
 
   if (selectedButton.classList.contains("easy")) {
     maxNum = 10;
@@ -76,11 +152,10 @@ difficultyButtons.addEventListener("click", (event) => {
   } else {
     return;
   }
-  // startGame.currentTime = 0;
-  // startGame.play();
+
   playSounds(sounds.startGame);
   point *= maxNum;
-  userClass.innerText = "Sinan ";
+  userClass.innerText = user.value + " ";
 
   const pointSpan = document.createElement("span");
   pointSpan.className = "point";
@@ -89,12 +164,17 @@ difficultyButtons.addEventListener("click", (event) => {
 
   welcomeContainer.classList.add("none");
   gameContainer.classList.remove("none");
+  leaderboard.classList.add("none");
 
   numberArr = generateNumberArray(minNum, maxNum);
   randomNumber = getRandomNumber(minNum, maxNum);
 
   if (hasUserGuessed) {
     hasUserGuessed = false;
+    alert.classList.remove("error");
+    user.classList.remove("error");
+    upBtn.classList.remove("active");
+    downBtn.classList.remove("active");
   }
 });
 
@@ -115,9 +195,9 @@ const generateNumberArray = (min, max) => {
     // winCard.innerText = `You won! Your point is ${point}`;
     winCard.innerText = "You won!";
     cards.appendChild(winCard);
-    // levelWin.currentTime = 0;
-    // levelWin.play();
     playSounds(sounds.levelWin);
+
+    updateTopScores(user.value, parseInt(point));
   } else {
     for (let i of arr) {
       const card = document.createElement("div");
@@ -137,7 +217,6 @@ const generateNumberArray = (min, max) => {
       });
     }
   }
-
   return arr;
 };
 
@@ -148,8 +227,6 @@ cards.addEventListener("click", (e) => {
   if (!e.target.classList.contains("card")) {
     return;
   }
-  // cardSound.currentTime = 0;
-  // cardSound.play();
   playSounds(sounds.card);
   let userNum = parseInt(selectNumber);
 
@@ -184,9 +261,23 @@ const handleCardClick = (selectedNumber) => {
 homeButtons.forEach((button) => {
   button.addEventListener("click", () => {
     welcomeContainer.classList.remove("none");
+    leaderboard.classList.add("none");
     gameContainer.classList.add("none");
+    alert.classList.remove("error");
+    user.classList.remove("error");
+    upBtn.classList.remove("active");
+    downBtn.classList.remove("active");
+    user.value = "";
     userClass.innerText = "";
     hasUserGuessed = false;
     delNumArr = [];
   });
+});
+
+leadLink.addEventListener("click", () => {
+  welcomeContainer.classList.add("none");
+  leaderboard.classList.remove("none");
+  gameContainer.classList.add("none");
+
+  updateLeaderboard();
 });
