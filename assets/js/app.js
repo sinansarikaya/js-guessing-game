@@ -20,6 +20,9 @@ const cardSound = new Audio(
 const startGame = new Audio(
   "https://sinansarikaya.github.io/js-guessing-game/assets/sounds/startGame.mp3"
 );
+const levelWin = new Audio(
+  "https://sinansarikaya.github.io/js-guessing-game/assets/sounds/levelWin.mp3"
+);
 
 const getRandomNumber = (min, max) => {
   let rand = Math.floor(Math.random() * (max - min + 1) + min);
@@ -81,6 +84,8 @@ const generateNumberArray = (min, max) => {
     // winCard.innerText = `You won! Your point is ${point}`;
     winCard.innerText = "You won!";
     cards.appendChild(winCard);
+    levelWin.currentTime = 0;
+    levelWin.play();
   } else {
     for (let i of arr) {
       const card = document.createElement("div");
