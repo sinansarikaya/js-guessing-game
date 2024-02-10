@@ -28,12 +28,24 @@
         <p class="welcome-message">
           Welcome to the guessing game! Try to guess the correct number.
         </p>
+        <input type="text" class="name" placeholder="Enter your name" />
         <div class="difficulty-buttons">
           <button class="btn easy">Easy</button>
           <button class="btn medium">Medium</button>
           <button class="btn hard">Hard</button>
         </div>
+        <div class="checkbox-wrapper">
+          <input class="tgl tgl-skewed" id="cb" type="checkbox" checked />
+          <label
+            class="tgl-btn"
+            data-tg-off="OFF"
+            data-tg-on="ON"
+            for="cb"
+          ></label>
+          Background Sound
+        </div>
       </div>
+
       <div class="game-container none">
         <div class="upBtn"><i class="fa-solid fa-circle-up"></i></div>
         <div class="downBtn">

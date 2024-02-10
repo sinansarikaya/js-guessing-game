@@ -6,6 +6,8 @@ const difficultyButtons = document.querySelector(".difficulty-buttons");
 const upBtn = document.querySelector(".upBtn");
 const downBtn = document.querySelector(".downBtn");
 const userClass = document.querySelector(".username");
+const checkbox = document.getElementById("cb");
+const user = document.querySelector(".name");
 
 let selectNumber;
 let hasUserGuessed = false;
@@ -13,29 +15,53 @@ let minNum = 1;
 let maxNum;
 let delNumArr = [];
 let point;
+let userName = user.value;
 
-const cardSound = new Audio(
-  "https://sinansarikaya.github.io/js-guessing-game/assets/sounds/card.mp3"
-);
-const startGame = new Audio(
-  "https://sinansarikaya.github.io/js-guessing-game/assets/sounds/startGame.mp3"
-);
-const levelWin = new Audio(
-  "https://sinansarikaya.github.io/js-guessing-game/assets/sounds/levelWin.mp3"
-);
+const sounds = {
+  startGame: new Audio(
+    "https://sinansarikaya.github.io/js-guessing-game/assets/sounds/startGame.mp3"
+  ),
+  card: new Audio(
+    "https://sinansarikaya.github.io/js-guessing-game/assets/sounds/card.mp3"
+  ),
+  levelWin: new Audio(
+    "https://sinansarikaya.github.io/js-guessing-game/assets/sounds/levelWin.mp3"
+  ),
+};
+
+window.onload = () => {
+  const savedCheckboxState = localStorage.getItem("soundStatus");
+  if (savedCheckboxState === null) {
+    localStorage.setItem("soundStatus", "true");
+    console.log("NULL");
+  }
+
+  if (savedCheckboxState === "true") {
+    checkbox.checked = true;
+  } else {
+    checkbox.checked = false;
+  }
+};
+
+checkbox.addEventListener("change", () => {
+  const isChecked = checkbox.checked;
+  localStorage.setItem("soundStatus", JSON.stringify(isChecked));
+});
 
 const getRandomNumber = (min, max) => {
   let rand = Math.floor(Math.random() * (max - min + 1) + min);
   return rand;
 };
 
-homeButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    welcomeContainer.classList.remove("none");
-    gameContainer.classList.add("none");
-    userClass.innerText = "";
-  });
-});
+const playSounds = (sound) => {
+  sound.currentTime = 0;
+  console.log(checkbox.checked);
+  if (checkbox.checked) {
+    sound.play();
+  } else {
+    sound.pause();
+  }
+};
 
 difficultyButtons.addEventListener("click", (event) => {
   const selectedButton = event.target;
@@ -50,8 +76,9 @@ difficultyButtons.addEventListener("click", (event) => {
   } else {
     return;
   }
-  startGame.currentTime = 0;
-  startGame.play();
+  // startGame.currentTime = 0;
+  // startGame.play();
+  playSounds(sounds.startGame);
   point *= maxNum;
   userClass.innerText = "Sinan ";
 
@@ -65,6 +92,10 @@ difficultyButtons.addEventListener("click", (event) => {
 
   numberArr = generateNumberArray(minNum, maxNum);
   randomNumber = getRandomNumber(minNum, maxNum);
+
+  if (hasUserGuessed) {
+    hasUserGuessed = false;
+  }
 });
 
 const generateNumberArray = (min, max) => {
@@ -84,8 +115,9 @@ const generateNumberArray = (min, max) => {
     // winCard.innerText = `You won! Your point is ${point}`;
     winCard.innerText = "You won!";
     cards.appendChild(winCard);
-    levelWin.currentTime = 0;
-    levelWin.play();
+    // levelWin.currentTime = 0;
+    // levelWin.play();
+    playSounds(sounds.levelWin);
   } else {
     for (let i of arr) {
       const card = document.createElement("div");
@@ -116,8 +148,9 @@ cards.addEventListener("click", (e) => {
   if (!e.target.classList.contains("card")) {
     return;
   }
-  cardSound.currentTime = 0;
-  cardSound.play();
+  // cardSound.currentTime = 0;
+  // cardSound.play();
+  playSounds(sounds.card);
   let userNum = parseInt(selectNumber);
 
   if (userNum == randomNumber) {
@@ -147,3 +180,13 @@ randomNumber = getRandomNumber(minNum, maxNum - delNumArr.length);
 const handleCardClick = (selectedNumber) => {
   return selectedNumber;
 };
+
+homeButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    welcomeContainer.classList.remove("none");
+    gameContainer.classList.add("none");
+    userClass.innerText = "";
+    hasUserGuessed = false;
+    delNumArr = [];
+  });
+});
