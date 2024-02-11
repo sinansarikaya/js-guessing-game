@@ -200,8 +200,24 @@ const generateNumberArray = (min, max) => {
   if (hasUserGuessed) {
     const winCard = document.createElement("div");
     winCard.className = "win-card";
-    winCard.innerText = `You won! Your point is ${point}`;
     cards.appendChild(winCard);
+
+    const winText = document.createElement("span");
+    winText.className = "win-text";
+    winText.innerText = `You won! Your point is ${point}`;
+    winCard.appendChild(winText);
+
+    const replay = document.createElement("div");
+    replay.className = "replay";
+    replay.innerText = "Play Again";
+    const replayBtn = document.createElement("i");
+    replayBtn.className = "fa-solid fa-rotate-right";
+    replay.appendChild(replayBtn);
+
+    replay.addEventListener("click", resetGame);
+
+    winCard.appendChild(replay);
+
     playSounds(sounds.levelWin);
     winnerName = userClass.innerText =
       user.value.charAt(0).toUpperCase() + user.value.slice(1);
@@ -265,20 +281,22 @@ const handleCardClick = (selectedNumber) => {
   return selectedNumber;
 };
 
+const resetGame = () => {
+  welcomeContainer.classList.remove("none");
+  leaderboard.classList.add("none");
+  gameContainer.classList.add("none");
+  alert.classList.remove("error");
+  user.classList.remove("error");
+  upBtn.classList.remove("active");
+  downBtn.classList.remove("active");
+  user.value = "";
+  userClass.innerText = "";
+  hasUserGuessed = false;
+  delNumArr = [];
+};
+
 homeButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    welcomeContainer.classList.remove("none");
-    leaderboard.classList.add("none");
-    gameContainer.classList.add("none");
-    alert.classList.remove("error");
-    user.classList.remove("error");
-    upBtn.classList.remove("active");
-    downBtn.classList.remove("active");
-    user.value = "";
-    userClass.innerText = "";
-    hasUserGuessed = false;
-    delNumArr = [];
-  });
+  button.addEventListener("click", resetGame);
 });
 
 leadLink.addEventListener("click", () => {
