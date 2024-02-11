@@ -93,7 +93,10 @@ const updateLeaderboard = () => {
 
     const usernameSpan = document.createElement("span");
     usernameSpan.className = "user-name";
-    usernameSpan.innerText = user.username;
+    usernameSpan.innerText =
+      user.username.charAt(0).toUpperCase() +
+      user.username.slice(1).toLowerCase();
+
     userElement.appendChild(usernameSpan);
 
     const userPointSpan = document.createElement("span");
@@ -160,8 +163,8 @@ difficultyButtons.addEventListener("click", (event) => {
 
   playSounds(sounds.startGame);
   point *= maxNum;
-  userClass.innerText = user.value + " ";
-
+  userClass.innerText =
+    user.value.charAt(0).toUpperCase() + user.value.slice(1) + " ";
   const pointSpan = document.createElement("span");
   pointSpan.className = "point";
   userClass.appendChild(pointSpan);
@@ -200,8 +203,10 @@ const generateNumberArray = (min, max) => {
     winCard.innerText = `You won! Your point is ${point}`;
     cards.appendChild(winCard);
     playSounds(sounds.levelWin);
+    winnerName = userClass.innerText =
+      user.value.charAt(0).toUpperCase() + user.value.slice(1);
 
-    updateTopScores(user.value, parseInt(point));
+    updateTopScores(winnerName, parseInt(point));
   } else {
     for (let i of arr) {
       const card = document.createElement("div");
