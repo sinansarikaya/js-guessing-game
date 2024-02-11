@@ -38,12 +38,9 @@ window.onload = () => {
   const savedCheckboxState = localStorage.getItem("soundStatus");
   if (savedCheckboxState === null) {
     localStorage.setItem("soundStatus", "true");
-  }
-
-  if (savedCheckboxState === "true") {
     checkbox.checked = true;
   } else {
-    checkbox.checked = false;
+    checkbox.checked = savedCheckboxState === "true";
   }
 };
 
@@ -76,8 +73,6 @@ const updateLeaderboard = () => {
   leaderboardContainer.appendChild(leadTitle);
 
   const topScores = JSON.parse(localStorage.getItem("topScores")) || [];
-
-  console.log(topScores.length == 0);
 
   if (topScores.length == 0) {
     const noValue = document.createElement("div");
@@ -257,8 +252,6 @@ cards.addEventListener("click", (e) => {
     delNumArr.push(userNum);
   }
   numberArr = generateNumberArray(minNum, maxNum);
-
-  console.log(randomNumber);
 });
 
 randomNumber = getRandomNumber(minNum, maxNum - delNumArr.length);
