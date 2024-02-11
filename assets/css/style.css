@@ -15,6 +15,8 @@
   --orange-hover: #f4774d;
   --red-hover: #ff4d4d;
   --green-hover: #56c57a;
+
+  --primary-font: "Lufga", sans-serif;
 }
 * {
   margin: 0;
@@ -27,12 +29,19 @@ li {
 a {
   text-decoration: none;
 }
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+html {
+  font-size: 1rem;
+}
 body {
   background-color: var(--primary-color);
-  height: 100vh;
   display: flex;
   flex-direction: column;
-  font-family: "Lufga", sans-serif;
+  font-family: var(--primary-font);
 }
 .navbar {
   background-color: var(--secondary-hover);
@@ -45,7 +54,6 @@ body {
   font-weight: bold;
   color: var(--primary-color);
   font-size: 1.2rem;
-  margin-bottom: 50px;
   padding: 20px 0;
 }
 .navbar .logo {
@@ -72,14 +80,16 @@ body {
 }
 .container {
   width: 100%;
+  flex: 1;
+  min-height: calc(100% - 70px -70px);
   max-width: 1400;
   display: flex;
   flex-direction: column;
-  margin-bottom: auto;
-  height: 100%;
+  margin: 50px auto;
 }
 .container .welcome-container {
-  width: 400px;
+  width: 95%;
+  max-width: 400px;
   margin: auto;
   text-align: center;
   background-color: var(--primary-color);
@@ -290,13 +300,39 @@ body {
   justify-content: center;
   align-items: center;
   gap: 8px;
+  position: relative;
+  bottom: 0px;
+  padding: 20px 0;
 }
-.footer a {
+.footer div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.footer div a {
   color: var(--primary-color);
+  transition: color 0.5s ease-in-out;
 }
-.footer a:hover {
+.footer div a:hover {
   color: var(--orange-hover);
 }
-.footer .footer_heart__SGb3w {
+.footer div .footer_heart__SGb3w {
   color: var(--red-color);
+}
+@media (max-width: 768px) {
+  html {
+    font-size: 0.75rem;
+  }
+}
+@media (max-width: 480px) {
+}
+@media (max-width: 348px) {
+  .navbar {
+    flex-direction: column;
+    gap: 0.5rem;
+    height: 90px;
+  }
+  .footer {
+    flex-direction: column;
+  }
 }
